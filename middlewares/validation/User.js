@@ -23,3 +23,9 @@ exports.userValidation = (req, res, next)=>{
     const error = result[0].msg;
     res.json({success:false, message: error})
 }
+
+exports.validateUserSignIn = [
+    check('email').trim().isEmail().withMessage('email/ password required'),
+    check('password').trim().not().isEmpty().withMessage('email/passsword required')
+
+]
