@@ -1,16 +1,17 @@
 const app = require('express')();
-const process = require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const UserModel = require('./models/User');
-const userRouter = require('./routes/User')
+const userRouter = require('./routes/User');
 
-const uri = `mongodb+srv://${process.parsed.user}:${process.parsed.password}@cluster0.jjqzrnx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 
-mongoose.connect(uri,{
-    useUnifiedTopology:true,
-    useNewUrlParser:true
-})
+mongoose.connect(process.env.MONGO_URI,{
+    
+}).then(()=>{
+    console.log("The db is connected")
+}).catch(error=> console.log(error.message))
+
 
 app.use(express.json());
 app.use(userRouter);
@@ -43,9 +44,6 @@ app.get('/', (req, res) => {
     res.send('Connecting to DB');
 });
 
-//console.log(process)
-const port = process.parsed.port;
-
-app.listen(port,()=>{
-    console.log(`listening on port ${port}`)
+app.listen(3000,()=>{
+    console.log("listening on port 3000")
 })

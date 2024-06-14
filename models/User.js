@@ -15,7 +15,8 @@ const UserSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    avatar: Buffer
 })
 
 UserSchema.pre('save', function(next){
