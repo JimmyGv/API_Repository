@@ -2,8 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-const {createUser, userSignIn} = require('../controllers/User')
-const {validateUserSignUp, validateUserSignIn, userValidation} = require('../middlewares/validation/User')
+const {createUser, userSignIn, addVehicleToUser, changesGral} = require('../controllers/User')
+const {validateUserSignUp, validateUserSignIn, userValidation, validateObjectId} = require('../middlewares/validation/User')
 const {isAuth} = require('../middlewares/auth')
 const multer = require("multer");
 
@@ -26,6 +26,20 @@ const uploads = multer({storage, fileFilter})
 router.post('/users/add',validateUserSignUp, userValidation, createUser)
 
 router.post('/users/sign-in', validateUserSignIn, userValidation, userSignIn)
+router.post('/addVehicleToUser/:userId/:idVehicle',isAuth,
+    validateObjectId('userId'),
+    validateObjectId('idVehicle'),
+    addVehicleToUser
+);
+
+router.post('/vehicles/addChange',isAuth,
+    [
+        validateObjectId('idUser'),   // Validar que idUser sea un ObjectId válido
+        validateObjectId('idVehicle') // Validar que idVehicle sea un ObjectId válido
+    ],
+    changesGral
+);
+
 router.post('/users/upload-profile', isAuth, uploads.single('profile'),async (req, res) =>{
   const {user} = req
   if(!user) return res.status(401).json({success:false,message:"unauthorized access"})

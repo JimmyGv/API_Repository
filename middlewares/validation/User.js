@@ -29,3 +29,16 @@ exports.validateUserSignIn = [
     check('password').trim().not().isEmpty().withMessage('email/passsword required')
 
 ]
+
+exports.validateObjectId = (paramName) => {
+    return (req, res, next) => {
+        const objectId = req.params[paramName] || req.body[paramName];
+        if (!mongoose.Types.ObjectId.isValid(objectId)) {
+            return res.status(400).json({
+                success: false,
+                message: `${paramName} must be a valid ObjectId`
+            });
+        }
+        next();
+    };
+};
