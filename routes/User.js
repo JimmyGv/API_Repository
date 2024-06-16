@@ -26,7 +26,7 @@ const uploads = multer({storage, fileFilter})
 router.post('/users/add',validateUserSignUp, userValidation, createUser)
 
 router.post('/users/sign-in', validateUserSignIn, userValidation, userSignIn)
-router.post('/addVehicleToUser/:userId/:idVehicle',isAuth,
+router.post('/addVehicleToUser/',isAuth,
     validateObjectId('userId'),
     validateObjectId('idVehicle'),
     addVehicleToUser
