@@ -1,4 +1,5 @@
 const {check, validationResult} =require('express-validator')
+const mongoose = require('mongoose')
 
 exports.validateUserSignUp = [
     check('name').trim().not().isEmpty().withMessage('Name is required').isString().withMessage('Must be a valid name').isLength({min:10,  max:100}).

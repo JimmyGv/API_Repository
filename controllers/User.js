@@ -7,7 +7,7 @@ exports.addVehicleToUser = async (req, res) => {
     if(!akaVehicle){
         return res.json({
             success: false,
-            message: 'This email is alredy in use, try sign-in'
+            message: 'Please enter de aka to the vehicle'
         });
     }
     try {
@@ -22,16 +22,27 @@ exports.addVehicleToUser = async (req, res) => {
             });
         }
 
+        console.log('User found:', user);
+
+        if (!user.vehicles) {
+            user.vehicles = [];
+        }
+
+        console.log('User vehicles before check:', user.vehicles);
+
         // Verificar si el vehículo ya está asociado al usuario
-        if (user.vehicles.includes(idVehicle)) {
+        if (user.vehicles.some(vehicle => vehicle.idVehicle === idVehicle)) {
             return res.json({
                 success: false,
                 message: 'Vehicle already exists'
             });
         }
 
+        console.log('ok')        
+
         // Si el vehículo no está asociado, añadirlo a la lista de vehículos del usuario
-        user.vehicles.push(idVehicle);
+        const newVehicle = { idVehicle, akaVehicle, dateAdded: new Date() };
+        user.vehicles.push(newVehicle);
         await user.save();
 
         return res.json({
@@ -137,6 +148,7 @@ exports.userSignIn = async (req, res) =>{
             message:"the email/password doesn't match"
         });
     const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn:'1d'});
-    res.json({success:true,user, token})
+
+    res.json({success:true, user, token})
     //npm i jsonwebtok
 }

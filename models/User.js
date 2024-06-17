@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { type } = require('os');
 const bcrypt = require('bcrypt');
+const VehicleUserSchema = require('../models/VehiclesToUser')
 
 const UserSchema = new mongoose.Schema({
     name:{
@@ -16,7 +17,11 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    avatar: Buffer
+    avatar: Buffer,
+    vehicles: {
+        type: [{VehicleUserSchema}],
+        default:[]
+      }
 })
 
 UserSchema.pre('save', function(next){
