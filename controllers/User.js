@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/User');
-
+const VehicleUserSchema = require('../models/VehiclesToUser')
 exports.addVehicleToUser = async (req, res) => {
     const { userId, idVehicle, akaVehicle } = req.body;
 
@@ -36,18 +36,18 @@ exports.addVehicleToUser = async (req, res) => {
                 success: false,
                 message: 'Vehicle already exists'
             });
-        }
-
-        console.log('ok')        
+        }     
 
         // Si el vehículo no está asociado, añadirlo a la lista de vehículos del usuario
         const newVehicle = { idVehicle, akaVehicle, dateAdded: new Date() };
-        user.vehicles.push(newVehicle);
-        await user.save();
-
+        user.vehicles.addToSet(newVehicle);
+        console.log(user)
+    // Guardar el usuario actualizado
+        const answer = await user.save();
         return res.json({
             success: true,
-            message: 'Vehicle added successfully'
+            message: 'Vehicle added successfully',
+            result: answer
         });
     } catch (error) {
         console.error('Error adding vehicle to user:', error.message);

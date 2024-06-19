@@ -5,7 +5,6 @@ const VehicleUserSchema = new mongoose.Schema({
   idVehicle: { type: String, required: true },
   akaVehicle: { type: String, required: true },
   dateAdded: { type: Date, default: Date.now },
-  avatar: { type: Buffer },
   dataVehicle: {
     type: [{
       changeName: { type: String },

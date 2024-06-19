@@ -42,8 +42,7 @@ router.post('/vehicles/addChange',isAuth,
 
 router.post('/users/upload-profile', isAuth, uploads.single('profile'),async (req, res) =>{
   const {user} = req
-  if(!user) return res.status(401).json({success:false,message:"unauthorized access"})
-    
+  if(!user) return res.status(401).json({success:false,message:"unauthorized access in upload profile"})
     try {
         const profileBuffer=req.file.buffer;
         const {width, height} = await sharp(profileBuffer).metadata()
